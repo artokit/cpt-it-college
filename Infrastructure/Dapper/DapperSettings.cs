@@ -1,4 +1,4 @@
-using Infrastructure.Interfaces.Settings;
+using Infrastructure.Dapper.Interfaces.Settings;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Dapper;
