@@ -1,4 +1,4 @@
-namespace Infrastructure.Interfaces;
+namespace Infrastructure.Dapper.Interfaces;
 
 public interface IQueryObject
 {

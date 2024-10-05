@@ -1,4 +1,4 @@
-namespace Infrastructure.Interfaces.Settings;
+namespace Infrastructure.Dapper.Interfaces.Settings;
 
 public interface IDapperSettings
 {

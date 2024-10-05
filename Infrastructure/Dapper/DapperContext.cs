@@ -1,7 +1,8 @@
 using System.Data;
 using Dapper;
+using Infrastructure.Dapper.Interfaces;
+using Infrastructure.Dapper.Interfaces.Settings;
 using Infrastructure.Interfaces;
-using Infrastructure.Interfaces.Settings;
 using Npgsql;
 
 namespace Infrastructure.Dapper;

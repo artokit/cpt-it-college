@@ -1,3 +1,4 @@
+using Infrastructure.Dapper.Interfaces;
 using Infrastructure.Interfaces;
 
 namespace Infrastructure.Dapper;

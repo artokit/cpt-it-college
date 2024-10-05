@@ -1,4 +1,6 @@
-namespace Infrastructure.Interfaces;
+using Infrastructure.Interfaces;
+
+namespace Infrastructure.Dapper.Interfaces;
 
 public interface IDapperContext
 {
