@@ -5,7 +5,7 @@ namespace Infrastructure.Dapper;
 
 public class QueryObject : IQueryObject
 {
-    public QueryObject(string sql, object parameters)
+    public QueryObject(string sql, object? parameters = null)
     {
         if (string.IsNullOrEmpty(sql))
         {
@@ -17,5 +17,5 @@ public class QueryObject : IQueryObject
     }
     
     public string Sql { get; }
-    public object Parameters { get; }
+    public object? Parameters { get; }
 }

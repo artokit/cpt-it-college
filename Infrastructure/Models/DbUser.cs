@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 
 namespace Infrastructure.Models;
 
