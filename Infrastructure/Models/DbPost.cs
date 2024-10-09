@@ -11,4 +11,5 @@ public class DbPost
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public PostStatus Status { get; set; }
+    public List<DbImage>? Images { get; set; }
 }

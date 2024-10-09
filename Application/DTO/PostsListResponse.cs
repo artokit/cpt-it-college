@@ -1,8 +1,8 @@
-﻿using Infrastructure.Models;
+﻿using Domain;
 
 namespace Application.DTO;
 
 public class PostsListResponse
 {
-    public List<DbPost> Result { get; set; }
+    public List<Post> Result { get; set; }
 }

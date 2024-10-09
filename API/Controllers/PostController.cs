@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.DTO;
+using Application.Interfaces.Services;
 using Common.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -14,9 +16,20 @@ public class PostController : BaseController
         this.postService = postService;
     }
     
+    [Authorize(Roles = "Reader,Author")]
     [HttpGet("")]    
     public async Task<IActionResult> GetPosts()
     {
-        return Role == Roles.Reader ? Ok(await postService.GetPostsForReader()) : Ok(await postService.GetPostsForAuthor(UserId));
+        return Ok(Role == Roles.Reader
+            ? await postService.GetPostsForReader()
+            : await postService.GetPostsForAuthor(UserId));
+    }
+    
+    [Authorize(Roles = "Author")]
+    [HttpPost("")]    
+    public async Task<IActionResult> AddPosts(AddNewPostRequestDto addNewPostRequestDto)
+    {
+        await postService.AddPost(addNewPostRequestDto, UserId);
+        return Ok();
     }
 }
