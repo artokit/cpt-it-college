@@ -27,9 +27,25 @@ public class PostController : BaseController
     
     [Authorize(Roles = "Author")]
     [HttpPost("")]    
-    public async Task<IActionResult> AddPosts(AddNewPostRequestDto addNewPostRequestDto)
+    public async Task<IActionResult> AddPost(AddNewPostRequestDto addNewPostRequestDto)
     {
-        await postService.AddPost(addNewPostRequestDto, UserId);
+        var res = await postService.AddPost(UserId, addNewPostRequestDto);
+        return Ok(res);
+    }
+    
+    [Authorize(Roles = "Author")]
+    [HttpPut("{postId:int}")]    
+    public async Task<IActionResult> EditPost(int postId, EditPostRequestDto editPostRequestDto)
+    {
+        await postService.UpdatePost(UserId, postId, editPostRequestDto);
+        return Ok();
+    }
+
+    [Authorize(Roles = "Author")]
+    [HttpPatch("{postId:int}/status")]
+    public async Task<IActionResult> PublicPost(int postId, ChangePostStatusDto changePostStatusDto)
+    {
+        await postService.PublishPost(UserId, postId, changePostStatusDto);
         return Ok();
     }
 }
