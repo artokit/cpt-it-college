@@ -8,7 +8,8 @@ public static class ApplicationExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IPostService, PostService>();
         return services;
     }
 }
