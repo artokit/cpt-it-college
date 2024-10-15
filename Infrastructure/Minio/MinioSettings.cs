@@ -13,5 +13,4 @@ public class MinioSettings : IMinioSettings
         SecretKey = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY");
         BucketName = Environment.GetEnvironmentVariable("MINIO_BUCKET");
     }
-    
 }

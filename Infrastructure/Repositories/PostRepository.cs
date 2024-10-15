@@ -18,7 +18,7 @@ public class PostRepository : IPostRepository
     {
         var queryObject = new QueryObject(
             @"SELECT p.id, p.author_id as ""AuthorId"", p.title as ""Title"", p.Content as ""Content"", p.created_at as ""CreatedAt"", p.updated_at as ""UpdatedAt"", p.Status,
-                       i.id, i.post_id as ""PostId"", i.image_uuid as ""ImageUuid"", i.created_at as ""CreatedAt""
+                       i.id, i.post_id as ""PostId"", i.image_name as ""ImageName"", i.created_at as ""CreatedAt""
                 FROM posts p
                 LEFT JOIN images i ON p.Id = i.post_id WHERE status = 'published'");
         var res = await GetPostWithImages(queryObject);
@@ -29,7 +29,7 @@ public class PostRepository : IPostRepository
     {
         var queryObject = new QueryObject(
             @"SELECT p.id, p.author_id as ""AuthorId"", p.title as ""Title"", p.Content as ""Content"", p.created_at as ""CreatedAt"", p.updated_at as ""UpdatedAt"", p.Status,
-                       i.id, i.post_id as ""PostId"", i.image_uuid as ""ImageUuid"", i.created_at as ""CreatedAt""
+                       i.id, i.post_id as ""PostId"", i.image_name as ""ImageName"", i.created_at as ""CreatedAt""
                 FROM posts p
                 LEFT JOIN images i ON p.Id = i.post_id where author_id=@author_id", new {author_id=userId});
         var res = await GetPostWithImages(queryObject);
@@ -40,7 +40,7 @@ public class PostRepository : IPostRepository
     {
         var queryObject = new QueryObject(
             @"SELECT p.id, p.author_id as ""AuthorId"", p.title as ""Title"", p.Content as ""Content"", p.created_at as ""CreatedAt"", p.updated_at as ""UpdatedAt"", p.Status,
-                       i.id, i.post_id as ""PostId"", i.image_uuid as ""ImageUuid"", i.created_at as ""CreatedAt""
+                       i.id, i.post_id as ""PostId"", i.image_name as ""ImageName"", i.created_at as ""CreatedAt""
                 FROM posts p
                 LEFT JOIN images i ON p.Id = i.post_id where p.id = @post_id", new {post_id=id});
         var res = await GetPostWithImages(queryObject);
@@ -64,9 +64,10 @@ public class PostRepository : IPostRepository
         await dapperContext.Command(queryObject);
     }
 
-    public Task<DbPost?> DeleteImageFromPost(int postId, int imageId)
+    public async Task DeleteImage(int imageId)
     {
-        throw new NotImplementedException();
+        var queryObject = new QueryObject("DELETE FROM IMAGES where id = @imageId", new {imageId});
+        await dapperContext.Command(queryObject);
     }
 
     public async Task PublishPost(int id)
@@ -75,15 +76,19 @@ public class PostRepository : IPostRepository
         await dapperContext.Command(queryObject);
     }
 
-    public Task<DbPost?> AddImageToPost(int postId, DbImage dbImage)
+    public async Task<DbImage> AddImageToPost(int postId, string imageName)
     {
-        throw new NotImplementedException();
+        var queryObject =
+            new QueryObject(
+                "INSERT INTO IMAGES(post_id, image_name, created_at) VALUES(@postId, @imageName, now()) RETURNING id as \"Id\", post_id as \"PostId\", image_name as \"ImageName\", created_at as \"CreatedAt\"",
+                new { postId, imageName });
+        return await dapperContext.CommandWithResponse<DbImage>(queryObject);
     }
 
     private async Task<List<DbPost>> GetPostWithImages(IQueryObject queryObject)
     {
         var dictionary = new Dictionary<int, DbPost>();
-        var res = await dapperContext.QueryWithJoin<DbPost, DbImage, DbPost>(queryObject, (post, image) =>
+        var res = await dapperContext.QueryWithJoin<DbPost, DbImage?, DbPost>(queryObject, (post, image) =>
         {
             DbPost p;
             if (!dictionary.TryGetValue(post.Id, out p))
@@ -93,7 +98,7 @@ public class PostRepository : IPostRepository
                 dictionary.Add(p.Id, p);
             }
 
-            if (p.Id == image.PostId)
+            if (p.Id == image?.PostId)
             {
                 p.Images?.Add(image);
             }

@@ -54,7 +54,15 @@ public class PostController : BaseController
     public async Task<IActionResult> AddImageToPost(int postId, IFormFile image)
     {
         await using var stream = image.OpenReadStream();
-        await postService.AddImageToPost(postId, image.FileName, stream);
+        var post = await postService.AddImageToPost(postId, image.FileName, stream);
+        return Ok(post);
+    }
+
+    [Authorize(Roles = "Author")]
+    [HttpDelete("/api/posts")]
+    public async Task<IActionResult> DeleteImage(int postId, int imageId)
+    {
+        await postService.DeleteImageFromPost(postId, imageId, UserId);
         return Ok();
     }
 }

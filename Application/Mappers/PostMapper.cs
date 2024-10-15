@@ -18,7 +18,6 @@ public static class PostMapper
             Status = dbPost.Status,
             Images = (dbPost.Images != null && dbPost.Images.Count != 0) ? dbPost.Images.MapToDomain() : []
         };
-        Console.WriteLine(p);
         return p;
     }
 

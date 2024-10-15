@@ -9,7 +9,7 @@ public interface IPostRepository
     public Task<DbPost?> GetPostById(int id);
     public Task<DbPost> AddPost(DbPost dbPost);
     public Task UpdatePost(DbPost dbPost);
-    public Task<DbPost?> DeleteImageFromPost(int postId, int imageId);
+    public Task DeleteImage(int imageId);
     public Task PublishPost(int id);
-    public Task<DbPost?> AddImageToPost(int postId, DbImage dbImage);
+    public Task<DbImage> AddImageToPost(int postId, string imageName);
 }

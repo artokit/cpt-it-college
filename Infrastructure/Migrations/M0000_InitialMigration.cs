@@ -25,7 +25,7 @@ public class M0000_InitialMigration : Migration
         Create.Table("images")
             .WithColumn("id").AsInt64().Identity().NotNullable().PrimaryKey()
             .WithColumn("post_id").AsInt64().ForeignKey().NotNullable()
-            .WithColumn("image_uuid").AsString().NotNullable()
+            .WithColumn("image_name").AsString().NotNullable()
             .WithColumn("created_at").AsDateTime().NotNullable();
     }
 
@@ -33,5 +33,6 @@ public class M0000_InitialMigration : Migration
     {
         Delete.Table("users");
         Delete.Table("posts");
+        Delete.Table("images");
     }
 }

@@ -9,7 +9,8 @@ public static class ImageMapper
     {
         return new Image
         {
-            ImageUrl = dbImage.ImageUuid,
+            Id = dbImage.Id,
+            ImageUrl = $"http://localhost:9000/bucket/{dbImage.ImageName}",
             CreatedAt = dbImage.CreatedAt
         };
     }
