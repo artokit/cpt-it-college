@@ -2,10 +2,13 @@ using API.Extensions;
 using API.Middlewares;
 using Application.Extensions;
 using FluentMigrator.Runner;
-using Infrastructure.Dapper;
 using Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    DotNetEnv.Env.Load("../.env");
+}
 var connectionString = builder.Configuration["ConnectionStrings:Database"];
 
 builder.Services.AddJwtTokenBearer();
@@ -17,6 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDapper();
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+builder.Services.AddMinio();
 
 var app = builder.Build();
 var serviceProvider = app.Services.CreateScope().ServiceProvider;

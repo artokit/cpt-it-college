@@ -5,17 +5,21 @@ using Application.Mappers;
 using Domain;
 using Domain.Enums;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Minio.Interfaces;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services;
 
 public class PostService : IPostService
 {
     private IPostRepository postRepository;
-
-    public PostService(IPostRepository postRepository)
+    private readonly IMinioService minioService;
+    
+    public PostService(IPostRepository postRepository, IMinioService minioService)
     {
         this.postRepository = postRepository;
+        this.minioService = minioService;
     }
     
     public async Task<PostsListResponse> GetPostsForReader()
@@ -75,5 +79,16 @@ public class PostService : IPostService
         }
 
         await postRepository.PublishPost(postId);
+    }
+
+    public async Task AddImageToPost(int postId, string objectName, Stream image)
+    {
+        if (await postRepository.GetPostById(postId) == null)
+        {
+            throw new PostNotFoundException("Пост не найден");
+        }
+        
+        var uniqueObjectName =  $"{Guid.NewGuid()}-{objectName}";
+        await minioService.UploadFile(uniqueObjectName, image);
     }
 }
