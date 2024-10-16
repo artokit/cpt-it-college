@@ -48,4 +48,21 @@ public class PostController : BaseController
         await postService.PublishPost(UserId, postId, changePostStatusDto);
         return Ok();
     }
+
+    [Authorize(Roles = "Author")]
+    [HttpPost("/api/posts/{postId:int}/images")]
+    public async Task<IActionResult> AddImageToPost(int postId, IFormFile image)
+    {
+        await using var stream = image.OpenReadStream();
+        var post = await postService.AddImageToPost(postId, image.FileName, stream);
+        return Ok(post);
+    }
+
+    [Authorize(Roles = "Author")]
+    [HttpDelete("/api/posts/{postId:int}/images/{imageId:int}")]
+    public async Task<IActionResult> DeleteImage(int postId, int imageId)
+    {
+        await postService.DeleteImageFromPost(postId, imageId, UserId);
+        return Ok();
+    }
 }

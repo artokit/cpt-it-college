@@ -15,7 +15,8 @@ public class M0000_InitialMigration : Migration
 
         Create.Table("posts")
             .WithColumn("id").AsInt64().Identity().NotNullable().PrimaryKey()
-            .WithColumn("author_id").AsInt64().ForeignKey().NotNullable()
+            .WithColumn("author_id").AsInt64().NotNullable().ForeignKey("FK_Posts_Users", "users", "id")
+            .WithColumn("idempotency_key").AsString().NotNullable().Unique()
             .WithColumn("title").AsString().NotNullable()
             .WithColumn("content").AsString().NotNullable()
             .WithColumn("created_at").AsDateTime().NotNullable()
@@ -24,8 +25,8 @@ public class M0000_InitialMigration : Migration
 
         Create.Table("images")
             .WithColumn("id").AsInt64().Identity().NotNullable().PrimaryKey()
-            .WithColumn("post_id").AsInt64().ForeignKey().NotNullable()
-            .WithColumn("image_uuid").AsString().NotNullable()
+            .WithColumn("post_id").AsInt64().NotNullable().ForeignKey("FK_Images_Posts", "posts", "id")
+            .WithColumn("image_name").AsString().NotNullable()
             .WithColumn("created_at").AsDateTime().NotNullable();
     }
 
@@ -33,5 +34,6 @@ public class M0000_InitialMigration : Migration
     {
         Delete.Table("users");
         Delete.Table("posts");
+        Delete.Table("images");
     }
 }

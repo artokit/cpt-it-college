@@ -4,6 +4,8 @@ using Infrastructure.Dapper;
 using Infrastructure.Dapper.Interfaces;
 using Infrastructure.Dapper.Interfaces.Settings;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Minio;
+using Infrastructure.Minio.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +27,13 @@ public static class InfrastructureExtensions
         return services;
     }
 
+    public static IServiceCollection AddMinio(this IServiceCollection services)
+    {
+        services.AddScoped<IMinioSettings, MinioSettings>();
+        services.AddScoped<IMinioService, MinioService>();
+        return services;
+    }
+    
     public static IServiceCollection AddMigrations(this IServiceCollection services, string connectionString)
     {
         services.AddFluentMigratorCore().ConfigureRunner(rb =>

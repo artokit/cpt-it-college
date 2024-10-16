@@ -16,12 +16,10 @@ public static class Jwt
 
     private static string? GetValueFromJwtClaims(this string authHeader, string type)
     {
-        var encodedJwt = new JwtSecurityTokenHandler().ReadJwtToken(authHeader.Split(" ")[1]);
+        var encodedJwt = authHeader.Contains(' ')
+            ? new JwtSecurityTokenHandler().ReadJwtToken(authHeader.Split(" ")[1]) : new JwtSecurityTokenHandler()
+                .ReadJwtToken(authHeader);
+
         return encodedJwt.Payload.Claims.FirstOrDefault(c => c.Type.ToString() == type)?.Value;
-    }
-    
-    private static string GetToken(string authHeader)
-    {
-        return authHeader.Split(" ")[1];
     }
 }
