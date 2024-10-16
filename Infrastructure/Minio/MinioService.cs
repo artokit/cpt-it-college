@@ -34,22 +34,6 @@ public class MinioService : IMinioService
             new StatObjectArgs().WithBucket(minioSettings.BucketName).WithObject(objectName));
     }
 
-    public async Task<Stream?> DownloadFile(string objectName)
-    {
-        var memoryStream = new MemoryStream();
-        await minioClient.GetObjectAsync(
-            new GetObjectArgs()
-                .WithBucket(minioSettings.BucketName)
-                .WithObject(objectName)
-                .WithCallbackStream(async stream =>
-                {
-                    await stream.CopyToAsync(memoryStream);
-                })
-        );
-        memoryStream.Position = 0; 
-        return memoryStream;
-    }
-
     public async Task DeleteFile(string objectName)
     {
         await minioClient.RemoveObjectAsync(

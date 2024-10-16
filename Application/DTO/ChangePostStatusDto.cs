@@ -1,6 +1,4 @@
-﻿using Domain.Enums;
-
-namespace Application.DTO;
+﻿namespace Application.DTO;
 
 public class ChangePostStatusDto
 {

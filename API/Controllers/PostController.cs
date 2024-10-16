@@ -59,7 +59,7 @@ public class PostController : BaseController
     }
 
     [Authorize(Roles = "Author")]
-    [HttpDelete("/api/posts")]
+    [HttpDelete("/api/posts/{postId:int}/images/{imageId:int}")]
     public async Task<IActionResult> DeleteImage(int postId, int imageId)
     {
         await postService.DeleteImageFromPost(postId, imageId, UserId);

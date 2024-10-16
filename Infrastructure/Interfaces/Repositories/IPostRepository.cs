@@ -12,4 +12,5 @@ public interface IPostRepository
     public Task DeleteImage(int imageId);
     public Task PublishPost(int id);
     public Task<DbImage> AddImageToPost(int postId, string imageName);
+    public Task<DbPost?> GetPostByIdempotencyKey(string idempotencyKey);
 }
