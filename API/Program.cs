@@ -12,6 +12,16 @@ if (builder.Environment.IsDevelopment())
 var connectionString = builder.Configuration["ConnectionStrings:Database"];
 
 builder.Services.AddJwtTokenBearer();
+// builder.Services.AddCors(options =>
+// {
+ //   options.AddDefaultPolicy(builder =>
+//    {
+//        builder.AllowAnyOrigin()
+//            .AllowAnyHeader()
+//            .AllowAnyMethod();
+//    });
+// });
+
 builder.Services.AddSwaggerWithAuth();
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddMigrations(connectionString);
@@ -32,4 +42,8 @@ app.MapControllers();
 app.MapSwagger();
 app.UseSwaggerUI();
 
+app.UseCors(x => x.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials());
 app.Run();
